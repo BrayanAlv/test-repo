@@ -1,8 +1,11 @@
-FROM centos:latest
-RUN cd /etc/yum.repos.d/
-RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
-RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+FROM centos:7
+# Establece el directorio de trabajo correctamente
+WORKDIR /etc/yum.repos.d/
+# Corrige los repositorios de CentOS 7 que también están movidos
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 
+RUN yum update -y
 RUN yum install httpd wget zip unzip -y
 ADD https://www.tooplate.com/zip-templates/2121_wave_cafe.zip /var/www/html
 WORKDIR /var/www/html
